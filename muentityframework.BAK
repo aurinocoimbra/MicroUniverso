@@ -1,0 +1,61 @@
+DEFINE CLASS oDbTable AS Custom
+
+	PROTECTED TableName
+	PROTECTED Description
+	
+	PROCEDURE INIT
+		TableName = ""
+		Description = ""
+	ENDPROC
+
+	FUNCTION AddField( cName, cType, nWidth, nDecimal, cDescription )
+		
+		LOCAL oField
+		
+		cField	      = IIF( TYPE( "cName" ) == "C", cName, "Field"+ALLTRIM(STR(THIS.ControlCount+1))   )
+	    
+	    cType         = IIF( TYPE( "cType" )         <> "C",  "C", cType        )
+	    nWidth        = IIF( TYPE( "nWidth" )        <> "N",   10, nWidth       )
+	    nDecimal      = IIF( TYPE( "nDecimal" )      <> "N",    0, nDecimal     )
+	    
+	    .AddObject( cField, "oDbField" )
+	    
+	    oField = EVALUATE( "THIS."+cField)
+	    
+	    oField.FieldType        = cType
+	    oField.FieldWidth       = nWidth
+	    oField.FieldDecimal     = nDecimal
+	    oField.Description 		= cDescription
+    
+   		 RETURN oField
+   		 
+   	ENDFUNC
+
+ENDDEFINE
+
+******
+* oDbField
+*
+* Definição do objeto para estrutura de campos em tabelas
+*
+* 03-Abril-2022	[Aurino Coimbra]
+* Criação do código
+*************************************************************
+DEFINE CLASS oDbField AS Custom
+
+	PROTECTED FieldType			&& Tipo do campo
+	PROTECTED FieldWidth		&& Tamanho do campo
+	PROTECTED FieldDecimal		&& Número de casas decimais
+
+	PROTECTED Description		&& Descrição do campo
+	
+	PROCEDURE INIT
+		
+		FieldType		= ""
+		Description		= ""
+		FieldWidth		= ""
+		FieldDecimal	= ""
+		
+	ENDPROC
+	
+ENDDEFINE
